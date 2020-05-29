@@ -40,3 +40,87 @@
         This tool generates the link and joint tree:
         Created file mira_simple.gv
         Created file mira_simple.pdf
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Exercise U1-2
+1. touch urdf/mira_geometric.urdf
+
+---------------------------------------------------------------------------------------------------------------------------
+
+How to IMPORT 3D CAD to GAZEBO
+1. roscd mira_description
+2. cp ./models/mira/meshes/mira_body_v3.dae /home/user/catkin_ws/src/ROS_URDF/
+3. cp ./models/mira/meshes/mira_head_v5.dae /home/user/catkin_ws/src/ROS_URDF/
+4. cp ./models/mira/meshes/mira_eye_v4.dae /home/user/catkin_ws/src/ROS_URDF/
+5. roscd my_mira_description
+6. cd models;mkdir mira;cd mira;mkdir meshes
+7. cd /home/user/catkin_ws/src/ROS_URDF/;mv *.dae /home/user/catkin_ws/src/ROS_URDF/my_mira_description/models/mira/meshes/
+8. touch urdf/mira_only_daes.urdf
+9. roslaunch my_mira_description urdf_visualize.launch model:='$(find my_mira_description)/urdf/mira_only_daes.urdf'
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+To make a model appear in Gazebo you need to add the following:
+
+Inertias: The inertias and mass of the model is important if you want it to have physics applied
+Gazebo Physical Properties: Here you specify the frictions and material properties like colour or softness.
+Collisions: Without collisions the Robot models would just go through the floor.
+Visual Properties: We add colour to the visual, which only will affect the URDF in RVIZ, the colour in the simulation is defined in the Gazebo Physical Properties.
+Gazebo Sensors: Here is when you add cameras, motor controllers and all the robots systems.
+
+1. roscd my_mira_description
+2. touch urdf/mira_simple_collisions_inertias.urdf
+
+contoh inertia
+<inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.18" />
+    <inertia ixx="0.0002835" ixy="0.0" ixz="0.0" iyy="0.0002835" iyz="0.0" izz="0.000324"/>
+</inertial>
+
+3. roscd my_mira_description
+4. mkdir scripts
+5. touch scripts/inertia_calculator.py
+6. chmod +x scripts/inertia_calculator.py
+7. rosrun my_mira_description inertia_calculator.py
+8. roslaunch my_mira_description urdf_visualize.launch model:='$(find my_mira_description)/urdf/mira_simple_collisions_inertias.urdf'
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+1.4 Spawn into Simulation
+
+Now its time to see your creation inside the simulated world!.
+Now, how do you spawn a URDF file-defined robot into the simulated world?
+Through these two launch files:
+1. roscd my_mira_description
+2. touch launch/spawn_urdf.launch
+
+This second one's name is spawn_mira.launch:
+3. roscd my_mira_description
+4. touch launch/spawn_mira_simple_collisions_inertias.launch
+
+5. roslaunch my_mira_description spawn_mira_simple_collisions_inertias.launch
+
+How Delete a robot model from Gazebo
+6. rosservice call /gazebo/get_world_properties "{}"
+7. rosservice call /gazebo/delete_model "model_name: 'mira'"
+
+Or you can make your life easier by creating a client that removes the model:
+8. roscd my_mira_description
+9. touch scripts/delete_mira.py
+10. chmod +x scripts/delete_mira.py
+11. rosrun my_mira_description delete_mira.py
+
+--------------------------------------------------------------------------------------------
+
+Exercise U2-1 (SKIP dulu ya)
