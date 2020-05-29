@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <robot name="mira">
+
+    <material name="green">
+        <color rgba="0 0.8 0 1"/>
+    </material>
+
     <link name="base_link">
         <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-            <cylinder radius="0.06" length="0.09"/>
-        </geometry>
+        <!-- <origin rpy="0 0 0" xyz="0 0 0"/> -->
+            <geometry>
+                <cylinder radius="0.06" length="0.09"/>
+            </geometry>
+            <material name="green"/>
         </visual>
     </link>
 
